@@ -272,6 +272,17 @@ class EvilWinRM
                     client_key: $priv_key,
                     user_agent: $USER_AGENT,
                 )
+            elsif !$realm.nil? then
+                $conn = WinRM::Connection.new(
+                    endpoint: "https://#{$host}:#{$port}/#{$url}",
+                    user: "",
+                    password: "",
+                    :no_ssl_peer_verification => true,
+                    transport: :kerberos,
+                    realm: $realm,
+                    service: $service,
+                    user_agent: $USER_AGENT,
+                    )
             else
                 $conn = WinRM::Connection.new(
                     endpoint: "https://#{$host}:#{$port}/#{$url}",
@@ -488,8 +499,8 @@ class EvilWinRM
         # SSL checks
         if !$ssl and ($pub_key or $priv_key) then
             self.print_message("Useless cert/s provided, SSL is not enabled", TYPE_WARNING, true, $logger)
-        elsif $ssl
-            self.print_message("SSL enabled", TYPE_WARNING)
+        # elsif $ssl
+        #     self.print_message("SSL enabled", TYPE_WARNING)
         end
 
         if $ssl and ($pub_key or $priv_key) then
