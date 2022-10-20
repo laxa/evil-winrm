@@ -30,8 +30,6 @@ TYPE_SUCCESS = 4
 
 # Global vars
 
-# Global vars
-
 # Available commands
 $LIST = ['Bypass-4MSI', 'services', 'upload', 'download', 'menu', 'exit']
 $COMMANDS = $LIST.dup
@@ -124,7 +122,7 @@ class EvilWinRM
              begin
                  Readline.quoting_detection_proc
                     @completion_enabled = true
-                rescue NotImplementedError => err
+                rescue NotImplementedError, NoMethodError => err
                     @completion_enabled = false
                     # self.print_message("Remote path completions is disabled due to ruby limitation: #{err.to_s}", TYPE_WARNING)
                     # self.print_message("For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion", TYPE_DATA)
