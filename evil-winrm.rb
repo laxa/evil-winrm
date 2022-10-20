@@ -540,7 +540,7 @@ class EvilWinRM
             if !$command.nil? then
                 shell = $conn.shell(:powershell)
                 shell.run(menu)
-                do_command(shell, $command)
+                do_command(shell, $command, time)
                 self.custom_exit(0)
             end
             $conn.shell(:powershell) do |shell|
@@ -630,7 +630,7 @@ class EvilWinRM
                             $logger.info("*Evil-WinRM* PS #{pwd} > #{command}")
                         end
 
-                        do_command(shell, command)
+                        do_command(shell, command, time)
                     end
                 rescue Errno::EACCES => ex
                     puts()
@@ -657,7 +657,7 @@ class EvilWinRM
         end
     end
 
-    def do_command(shell, command)
+    def do_command(shell, command, time)
         if command.start_with?('upload') then
             if self.docker_detection() then
                 puts()
