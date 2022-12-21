@@ -485,7 +485,7 @@ class EvilWinRM
     def main
         self.arguments()
         self.connection_initialization()
-        file_manager = WinRM::FS::FileManager.new($conn)
+        $file_manager = WinRM::FS::FileManager.new($conn)
         self.print_header()
         self.completion_check()
 
@@ -540,7 +540,8 @@ class EvilWinRM
             if !$command.nil? then
                 shell = $conn.shell(:powershell)
                 shell.run(menu)
-                do_command(shell, $command, time)
+                pwd = shell.run("(get-location).path").output.strip
+                do_command(shell, $command, time, pwd)
                 self.custom_exit(0)
             end
             $conn.shell(:powershell) do |shell|
@@ -630,7 +631,7 @@ class EvilWinRM
                             $logger.info("*Evil-WinRM* PS #{pwd} > #{command}")
                         end
 
-                        do_command(shell, command, time)
+                        do_command(shell, command, time, pwd)
                     end
                 rescue Errno::EACCES => ex
                     puts()
@@ -657,7 +658,7 @@ class EvilWinRM
         end
     end
 
-    def do_command(shell, command, time)
+    def do_command(shell, command, time, pwd)
         if command.start_with?('upload') then
             if self.docker_detection() then
                 puts()
@@ -670,7 +671,7 @@ class EvilWinRM
                 left_path = paths.pop
 
                 self.print_message("Uploading #{left_path} to #{right_path}", TYPE_INFO, true, $logger)
-                file_manager.upload(left_path, right_path) do |bytes_copied, total_bytes|
+                $file_manager.upload(left_path, right_path) do |bytes_copied, total_bytes|
                     self.progress_bar(bytes_copied, total_bytes)
                     if bytes_copied == total_bytes then
                         puts("                                                             ")
@@ -697,7 +698,7 @@ class EvilWinRM
 
                 self.print_message("Downloading #{left_path} to #{right_path}", TYPE_INFO, true, $logger)
                 size = self.filesize(shell, left_path)
-                file_manager.download(left_path, right_path, size: size) do | index, size |
+                $file_manager.download(left_path, right_path, size: size) do | index, size |
                     self.progress_bar(index, size)
                 end
                 puts("                                                             ")
