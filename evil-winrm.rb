@@ -619,7 +619,7 @@ class EvilWinRM
                         if $colors_enabled then
                             command = Readline.readline(self.colorize("*Evil-WinRM*", "red") + self.colorize(" PS ", "yellow") + pwd + "> ", true)
                         else
-                            command = Readline.readline(pwd + "$ ", true)
+                            command = Readline.readline(pwd + "> ", true)
                         end
 
                         if command.nil? then
@@ -817,9 +817,11 @@ class EvilWinRM
         end
         output = shell.run(command) do |stdout, stderr|
             stdout&.each_line do |line|
-                STDOUT.puts(line.rstrip!)
+                STDOUT.puts(line.rstrip!.dump[1..].chop)
             end
-            STDERR.print(stderr)
+            stderr&.each_line do |line|
+                STDOUT.puts(line.rstrip!.dump[1..].chop)
+            end
         end
         if !$logger.nil? && !command.empty?
             output_logger=""
