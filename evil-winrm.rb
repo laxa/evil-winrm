@@ -817,10 +817,10 @@ class EvilWinRM
         end
         output = shell.run(command) do |stdout, stderr|
             stdout&.each_line do |line|
-                STDOUT.puts(line.rstrip!.dump[1..].chop)
+                STDOUT.puts(line.rstrip.dump[1..].chop)
             end
             stderr&.each_line do |line|
-                STDOUT.puts(line.rstrip!.dump[1..].chop)
+                STDOUT.puts(line.rstrip.dump[1..].chop)
             end
         end
         if !$logger.nil? && !command.empty?
