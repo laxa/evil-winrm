@@ -534,7 +534,7 @@ class EvilWinRM
         menu = f.read()
         f.close()
         command = ""
-        loaded = 0
+        loaded = 1
 
         begin
             time = Time.now.to_i
