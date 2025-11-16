@@ -228,13 +228,13 @@ class EvilWinRM
         $realm = options[:realm]
         $service = options[:service]
         if !$log.nil? then
-            if !Dir.exists?($full_logging_path)
+            if !Dir.exist?($full_logging_path)
                 Dir.mkdir $full_logging_path
             end
-            if !Dir.exists?($full_logging_path + "/" + Time.now.strftime("%Y%d%m"))
+            if !Dir.exist?($full_logging_path + "/" + Time.now.strftime("%Y%d%m"))
                 Dir.mkdir $full_logging_path + "/" + Time.now.strftime("%Y%d%m")
             end
-            if !Dir.exists?($full_logging_path + "/" + Time.now.strftime("%Y%d%m") + "/" + $host)
+            if !Dir.exist?($full_logging_path + "/" + Time.now.strftime("%Y%d%m") + "/" + $host)
                 Dir.mkdir $full_logging_path+ "/" + Time.now.strftime("%Y%d%m") + "/" + $host
             end
             $filepath = $full_logging_path + "/" + Time.now.strftime("%Y%d%m") + "/" + $host + "/" + Time.now.strftime("%H%M%S")
